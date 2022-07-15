@@ -7,7 +7,7 @@ const index = () => {
             {/* favicon - title*/}
             <Head>
                 <title>Harman Sandhu</title>
-                <link rel="icon" href="logo.svg" />
+                <link rel="icon" href="logo_w.svg" />
             </Head>
 
             {/* coming soon */}
