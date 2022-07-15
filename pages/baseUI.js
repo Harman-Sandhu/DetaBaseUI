@@ -167,16 +167,16 @@ export default function Home() {
           property="og:description"
           content="A place with more functionality for managing your Deta Base(s)."
         />
-        <meta property="og:image" content="" />
+        <meta property="og:image" content="https://harmansandhu.tech/BaseUI.jpg" />
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:card"  content="https://harmansandhu.tech/BaseUI.jpg" />
         <meta property="twitter:url" content="https://harmansandhu.tech/baseui" />
         <meta property="twitter:title" content="DETA Base UI" />
         <meta
           property="twitter:description"
           content="A place with more functionality for managing your Deta Base(s)."
         />
-        <meta property="twitter:image" content="" />
+        <meta property="twitter:image" content="https://harmansandhu.tech/BaseUI.jpg" />
 
       </Head>
       <div className={"py-8 " + (popupOpened && " blur-[2px] py-8 animate-pulse")}>
@@ -238,8 +238,8 @@ export default function Home() {
             </div>
           }
         </div>
-        <div className={`xl:px-0 ${detaBaseContent.length > 0 && "py-4 h-[85vh]"}`}>
-          <div className="text-sm block shadow rounded-lg overflow-x-auto h-full">
+        <div className={`xl:px-0 ${detaBaseContent.length > 0 && "py-4 "}`}>
+          <div className="text-sm block shadow rounded-lg overflow-x-auto h-full h-[85vh]">
             {detaBaseContent.length > 0 &&
               <table className="min-w-full leading-normal">
                 <thead className="sticky top-0">
