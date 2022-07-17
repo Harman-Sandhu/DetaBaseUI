@@ -17,4 +17,4 @@ https://user-images.githubusercontent.com/35080189/179429598-4124a6a4-33a8-4b71-
 - Backup - An option where you would be able to download your Base.
  
 ## 💡Suggestions:
-- Do you have any suggestion? Let me know 🙂
+- Do you have any suggestions? Let me know 🙂
