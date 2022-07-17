@@ -194,12 +194,12 @@ export default function Home() {
               <span>
                 {detaBaseName && <>
                   <span> - </span>
-                  <span title="Change Base" onClick={async () => {
+                  <span title="Change Base" onClick={async (e) => {
                     if (detaBaseContent.length > 0) {
                       var newBase = prompt("Enter Base name:", detaBaseName && detaBaseName)
                       if (newBase) {
                         setDetaBaseName(newBase)
-                        await init(newBase)
+                        await init(e,newBase)
                       }
                     }
                     else { alert("Please enter Project Key first") }
