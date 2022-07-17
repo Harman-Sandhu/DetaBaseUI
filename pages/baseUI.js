@@ -10,7 +10,7 @@ export default function Home() {
   const [lastSelected, setLastSelected] = useState(null)
   const [Search, setSearch] = useState('')
   const [selectedKeys, setSelectedKeys] = useState([])
-  const [isNotEmpty, setIsEmpty] = useState(false)
+  const [isEmpty, setisEmpty] = useState(true)
   const [popupOpened, setPopupOpened] = useState(false)
   const [popupContent, setPopupContent] = useState({})
   const [keys, setKeys] = useState()
@@ -30,36 +30,41 @@ export default function Home() {
     }
   }, [popupOpened])
 
-  const init = async () => {
-    const deta = Deta(projectKey)
-    // console.log('init', projectKey, detaBaseName)
-    document.title = "DETA - " + detaBaseName
-    const db = deta.Base(detaBaseName)
-    const all = await db.fetch()
-    // get all keys from multiple levels without duplicates and remove "key"
-    const keys = all.items.reduce((acc, item) => {
-      // no duplicate keys and remove "key"
-      return [...acc, ...Object.keys(item).filter(key => key !== 'key')]
+  const init = async (e,baseName = detaBaseName) => {
+    if (baseName === "" || baseName === undefined || baseName === null) {
+      baseName = detaBaseName
     }
-      , [])
-    // remove duplicate keys and sort alphabetically
-    var unique = keys.filter((item, index) => keys.indexOf(item) === index).sort()
-    setKeys(unique)
-    setDetaBaseContent(all.items)
+    try {
+      const deta = Deta(projectKey)
+      // console.log('init', projectKey, detaBaseName)
+      const db = deta.Base(baseName)
+      const all = await db.fetch()
+      // get all keys from multiple levels without duplicates and remove "key"
+      const keys = all.items.reduce((acc, item) => {
+        // no duplicate keys and remove "key"
+        return [...acc, ...Object.keys(item).filter(key => key !== 'key')]
+      }
+        , [])
+      // remove duplicate keys and sort alphabetically
+      var unique = keys.filter((item, index) => keys.indexOf(item) === index).sort()
+      setKeys(unique)
+      setDetaBaseContent(all.items)
+    } catch (error) {
+      alert(error)
+    }
     // console.log(all)
   }
 
   const changeArrayEmpty = () => {
     if (selectedKeys.length > 0) {
-      setIsEmpty(false)
+      setisEmpty(false)
     }
     else {
-      setIsEmpty(true)
+      setisEmpty(true)
     }
   }
 
   const handleSelect = (e, detaRow) => {
-    changeArrayEmpty()
     // console.log(e.target.checked, e.target.id, isShiftKeyDown, detaRow, lastSelected)
     if (e.target.checked && lastSelected != null && isShiftKeyDown) {
       for (let i = lastSelected; i != e.target.id; (i <= e.target.id ? i++ : i--)) {
@@ -99,6 +104,7 @@ export default function Home() {
 
     }
     setLastSelected(parseInt(e.target.id))
+    changeArrayEmpty()
     // console.log(selectedKeys)
   }
 
@@ -140,7 +146,7 @@ export default function Home() {
     const deta = Deta(projectKey)
     const db = deta.Base(detaBaseName)
     // const res = await db.update(popupContent.item.key, { [popupContent.key]: popupContent.value })
-    await db.update({ [popupContent.key]: popupContent.value }, popupContent.item.key)
+    await db.update({ [popupContent.key]: (popupContent.value[0] === "{" ? (popupContent.value.length > 1 ? JSON.parse(popupContent.value) : JSON.parse(popupContent.value)) : popupContent.value[0] === "[" ? (popupContent.value.length > 1 ? JSON.parse(popupContent.value) : null) : popupContent.value) }, popupContent.item.key)
     // console.log(popupContent)
     setPopupOpened(false)
 
@@ -151,7 +157,7 @@ export default function Home() {
     <div className="container px-4 md:mx-auto md:px-4 lg:px-0 max-w-5xl overflow-x-none">
       <Head>
         <title>{`DETA Base UI ` + (detaBaseName && "- " + detaBaseName)}</title>
-        <link rel="icon" href="/logo_w.svg" />
+        <link rel="icon" href="/favicon.svg" />
 
         {/* meta tags */}
         <meta name="title" content="DETA Base UI" />
@@ -169,7 +175,7 @@ export default function Home() {
         />
         <meta property="og:image" content="https://harmansandhu.tech/BaseUI.jpg" />
         {/* Twitter */}
-        <meta property="twitter:card"  content="https://harmansandhu.tech/BaseUI.jpg" />
+        <meta property="twitter:card" content="https://harmansandhu.tech/BaseUI.jpg" />
         <meta property="twitter:url" content="https://harmansandhu.tech/baseui" />
         <meta property="twitter:title" content="DETA Base UI" />
         <meta
@@ -179,12 +185,29 @@ export default function Home() {
         <meta property="twitter:image" content="https://harmansandhu.tech/BaseUI.jpg" />
 
       </Head>
-      <div className={"py-8 " + (popupOpened && " blur-[2px] py-8 animate-pulse")}>
+      <div className={"py-5 " + (popupOpened ? " blur-[2px] py-8 animate-pulse" : "")}>
         <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row mb-1 sm:mb-0 justify-between w-full">
           <div className="flex  md:justify-center my-auto items-center max-h-6">
             {/* <img src="https://docs.deta.sh/img/logo.svg" alt="DETA" className="h-10 w-10" /> */}
-            <div className="text-2xl leading-tight">
-              {detaBaseName ? "Deta Base - " + detaBaseName : 'Deta Base'}
+            <div className="text-2xl leading-tight" >
+              Deta Base
+              <span>
+                {detaBaseName && <>
+                  <span> - </span>
+                  <span title="Change Base" onClick={async () => {
+                    if (detaBaseContent.length > 0) {
+                      var newBase = prompt("Enter Base name:", detaBaseName && detaBaseName)
+                      if (newBase) {
+                        setDetaBaseName(newBase)
+                        await init(newBase)
+                      }
+                    }
+                    else { alert("Please enter Project Key first") }
+                  }
+                  } className="px-2 py-1 text-base rounded-md hover:cursor-pointer hover:border-pink-400 hover:text-pink-400 border border-slate-400 text-slate-400">{detaBaseName}</span>
+                </>
+                }
+              </span>
             </div>
             {/* total rows */}
             <div className="text-sm self-end text-gray-600">
@@ -208,7 +231,7 @@ export default function Home() {
               </button>
 
               {/* delete button */}
-              {isNotEmpty && (
+              {!isEmpty && (
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   onClick={() => {
@@ -239,13 +262,13 @@ export default function Home() {
           }
         </div>
         <div className={`xl:px-0 ${detaBaseContent.length > 0 && "py-4 "}`}>
-          <div className="text-sm block shadow rounded-lg overflow-x-auto h-full h-[85vh]">
+          <div className="text-sm block shadow rounded-lg overflow-x-auto h-full max-h-[85vh]">
             {detaBaseContent.length > 0 &&
               <table className="min-w-full leading-normal">
-                <thead className="sticky top-0">
+                <thead className="z-50 sticky top-0">
                   <tr>
                     {/* empty heading for select button */}
-                    <th className="min-w-[72px] px-4 py-2 bg-gray-100 text-center flex items-center justify-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 bg-gray-100 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                       {/* <label title='Select' className="flex items-center justify-center space-x-3">
                         <input type="checkbox" className="form-tick hover:cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-pink-500 checked:border-transparent focus:outline-none" />
                       </label> */}
@@ -283,8 +306,8 @@ export default function Home() {
                             </svg> */}
                             </label>
                           </td>
-                          <td className="md:px-5 py-5 border-b border-gray-200 bg-white px-2 ">
-                            <div className="flex items-center justify-start max-w-[5rem]">
+                          <td className="md:px-5 py-5 border-t border-r border-gray-200 bg-white px-2 ">
+                            <div className="flex items-center justify-start md:max-w-[]">
                               <div className="mx-auto">
                                 <p className="text-gray-900 whitespace-no-wrap truncate">
                                   {item.key}
@@ -296,8 +319,8 @@ export default function Home() {
                           {keys.map((key, index) => {
                             if (key !== "key") {
                               return (
-                                <td key={"key_" + key} className="px-5 py-5 border-t -border-l border-gray-200 bg-white">
-                                  <div className={`flex items-center ${Array.isArray(item[key]) && "justify-center"} ${typeof item[key] === "boolean" && "justify-center"}`}>
+                                <td key={"key_" + key} className="px-5 py-5 border-t border-r border-gray-200 bg-white">
+                                  <div className={`flex items-center ${Array.isArray(item[key]) && "justify-center"} ${typeof item[key] === "object" && 'justify-center'} ${typeof item[key] === "boolean" && "justify-center"}`}>
                                     {
                                       typeof item[key] === 'boolean' ?
                                         <>
