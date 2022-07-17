@@ -1,5 +1,5 @@
 ### Deta Base UI - A place with more functionality for managing your Deta Base(s).
-![GIF](https://cdn.discordapp.com/attachments/832267836076458034/998125883661484062/baseUI.gif)
+<video src="https://user-images.githubusercontent.com/35080189/179429798-32885e13-5ff2-4cd7-b1b1-bfb83252f3dc.mp4" autoplay></video
 
 ## ✨Features:
 - Total rows count
