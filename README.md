@@ -9,12 +9,13 @@
 - Delete
 - Add
 - Mobile friendly!
+- Backup (download your Base content as a JSON)
 
 ## 📱Mobile View:
 https://user-images.githubusercontent.com/35080189/179429598-4124a6a4-33a8-4b71-a27a-0fe2177b9370.mov
 
 ## 🔮Upcoming:
-- Backup - An option where you would be able to download your Base.
+<s>- Backup - An option where you would be able to download your Base.</s>
  
 ## 💡Suggestions:
 - Do you have any suggestions? Let me know 🙂
