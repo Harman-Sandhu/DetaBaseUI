@@ -16,6 +16,9 @@ export default function Home() {
   const [keys, setKeys] = useState();
 
   useEffect(() => {
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    })
     const handleClickOutside = (e) => {
       if (popupOpened && e.target.classList.contains("popup")) {
         setPopupOpened(false);
@@ -156,11 +159,11 @@ export default function Home() {
   };
 
   return (
-    <div className="container px-4 md:mx-auto md:px-4 lg:px-0 max-w-5xl overflow-x-none">
+    <div className="container px-4 md:mx-auto md:px-4 lg:px-0 max-w-5xl overflow-x-hidden w-screen max-w-screen min-w-screen">
       <Head>
         <title>{`DETA Base UI ` + (detaBaseName && "- " + detaBaseName)}</title>
         <link rel="icon" href="/favicon.svg" />
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="title" content="DETA Base UI" />
         <meta
           name="description"
@@ -199,7 +202,7 @@ export default function Home() {
       </Head>
       <div
         className={
-          "py-5" + (popupOpened ? " blur-[2px] py-8 animate-pulse" : "")
+          "py-5" + (popupOpened ? " blur-[2px] py-5 animate-pulse" : "")
         }
       >
         <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row mb-1 sm:mb-0 justify-between w-full">
@@ -262,9 +265,24 @@ export default function Home() {
                 </svg>
               </button>
 
+              <button title={`Download a copy of ${detaBaseName}`} className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-3 rounded"
+                onClick={(e) => {
+                  e.preventDefault()
+                  const blob = new Blob([JSON.stringify(detaBaseContent)], { type: "application/json" })
+                  const url = window.URL.createObjectURL(blob)
+                  const link = document.createElement("a")
+                  link.href = url
+                  link.download = `${detaBaseName}.json`
+                  link.click()
+                }}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+              
               {!isEmpty && (
                 <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded"
                   onClick={() => {
                     deleteItem();
                   }}
@@ -324,7 +342,7 @@ export default function Home() {
         <div className={`xl:px-0 ${detaBaseContent.length > 0 && "py-4 "}`}>
           <div className="text-sm block shadow rounded-lg overflow-x-auto h-full max-h-[85vh]">
             {detaBaseContent.length > 0 && (
-              <table className="min-w-full leading-normal">
+              <table className="min-w-full leading-normal last:mb-16 md:last:mb-0">
                 <thead className="z-50 sticky top-0">
                   <tr>
                     <th className="px-4 py-2 bg-gray-100 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
