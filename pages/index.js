@@ -159,7 +159,7 @@ export default function Home() {
   };
 
   return (
-    <div className="container px-4 md:mx-auto md:px-4 lg:px-0 max-w-5xl overflow-x-hidden w-screen max-w-screen min-w-screen">
+    <div className="container px-4 md:mx-auto md:px-4 lg:px-0 max-w-5xl w-screen max-w-screen min-w-screen">
       <Head>
         <title>{`DETA Base UI ` + (detaBaseName && "- " + detaBaseName)}</title>
         <link rel="icon" href="/favicon.svg" />
@@ -601,7 +601,7 @@ export default function Home() {
                           Array.isArray(popupContent.value)
                             ? JSON.stringify(popupContent.value, null, 2)
                             : typeof popupContent.value === "object"
-                            ? JSON.stringify(popupContent.value, null, 2)
+                            ? (popupContent.value === null ? "{}": JSON.stringify(popupContent.value, null, 2))
                             : popupContent.value
                         }
                         className="w-full max-h-56 flex-grow min-h-16 bg-slate-100 focus:border-pink-500 focus:ring-pink-500 border-2 border-gray-300 rounded-lg shadow-sm p-4 text-gray-700 resize-none"
