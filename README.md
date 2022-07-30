@@ -17,6 +17,7 @@ https://user-images.githubusercontent.com/35080189/179429598-4124a6a4-33a8-4b71-
 
 ## 🔮Upcoming:
 <s>- Backup - An option where you would be able to download your Base.</s>
+
 <s>- Share your Base with others!</s> 
  
 ## 💡Suggestions:
